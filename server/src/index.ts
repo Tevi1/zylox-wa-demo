@@ -31,14 +31,6 @@ app.options('*', cors({
 }));
 app.use(express.json({ limit: "50mb" }));
 
-app.use(whatsappBridge);
-app.use(indexList);
-app.use(audit);
-app.use(chat);
-app.use(chatAgents);
-app.use(upload);
-app.use(admin);
-
 const PORT = Number(process.env.PORT || 3002);
 
 // lightweight health probe
@@ -137,6 +129,15 @@ app.post("/chat-agents", (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// Mount other routes after custom endpoints
+app.use(whatsappBridge);
+app.use(indexList);
+app.use(audit);
+app.use(chat);
+app.use(chatAgents);
+app.use(upload);
+app.use(admin);
 
 app.listen(PORT, async () => {
   console.log(`API on http://localhost:${PORT}`);
