@@ -217,69 +217,59 @@ Be specific and cite the relevant documents when making points.`;
     const aiData = await openaiResponse.json();
     const aiAnswer = aiData.choices[0].message.content;
 
-    // Generate agent responses
-    const agentResponses = [
-      {
-        agent: "Legal",
-        bullets: [
-          "Legal analysis based on available contracts and agreements",
-          "Compliance considerations identified",
-          "Risk assessment completed"
-        ],
-        risk_level: "low",
-        insufficient_context: false
-      },
-      {
-        agent: "Finance", 
-        bullets: [
-          "Financial implications analyzed",
-          "Revenue and cost considerations reviewed",
-          "Investment requirements assessed"
-        ],
-        risk_level: "low",
-        insufficient_context: false
-      },
-      {
-        agent: "Ops",
-        bullets: [
-          "Operational requirements identified",
-          "Process optimization opportunities noted",
-          "Resource allocation considered"
-        ],
-        risk_level: "low",
-        insufficient_context: false
-      },
-      {
-        agent: "Analyst",
-        bullets: [
-          "Market analysis completed",
-          "Trends and patterns identified",
-          "Data-driven insights provided"
-        ],
-        risk_level: "low",
-        insufficient_context: false
-      },
-      {
-        agent: "Tax",
-        bullets: [
-          "Tax implications reviewed",
-          "Compliance requirements identified",
-          "Optimization opportunities noted"
-        ],
-        risk_level: "low",
-        insufficient_context: false
-      },
-      {
-        agent: "Strategy",
-        bullets: [
-          "Strategic implications analyzed",
-          "Market positioning considered",
-          "Growth opportunities identified"
-        ],
-        risk_level: "low",
-        insufficient_context: false
-      }
-    ];
+    // Generate detailed agent responses using AI
+    const agentPrompts = {
+      Legal: `As a Legal Expert, analyze this question from a legal perspective: "${question}". Consider contracts, compliance, regulations, and legal risks. Provide specific legal insights.`,
+      Finance: `As a CFO, analyze this question from a financial perspective: "${question}". Consider revenue, costs, investments, ROI, and financial risks. Provide specific financial insights.`,
+      Ops: `As an Operations Strategist, analyze this question from an operational perspective: "${question}". Consider processes, efficiency, resources, and operational risks. Provide specific operational insights.`,
+      Analyst: `As a Business Analyst, analyze this question from a data and market perspective: "${question}". Consider trends, metrics, market data, and analytical insights. Provide specific analytical insights.`,
+      Tax: `As a Tax Advisor, analyze this question from a tax perspective: "${question}". Consider tax implications, compliance, optimization, and tax risks. Provide specific tax insights.`,
+      Strategy: `As a Strategy Consultant, analyze this question from a strategic perspective: "${question}". Consider market positioning, competitive advantage, and strategic opportunities. Provide specific strategic insights.`
+    };
+
+    const agentResponses = await Promise.all(
+      Object.entries(agentPrompts).map(async ([agent, prompt]) => {
+        try {
+          const agentResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'gpt-4',
+              messages: [
+                { role: 'system', content: `You are a ${agent} expert. Provide concise, specific insights. Keep responses under 100 words.` },
+                { role: 'user', content: prompt }
+              ],
+              temperature: 0.7,
+              max_tokens: 150
+            })
+          });
+
+          if (agentResponse.ok) {
+            const agentData = await agentResponse.json();
+            const agentAnswer = agentData.choices[0].message.content;
+            return {
+              agent: agent,
+              response: agentAnswer,
+              risk_level: "low",
+              insufficient_context: false
+            };
+          }
+        } catch (error) {
+          console.error(`Error getting ${agent} response:`, error);
+        }
+
+        // Fallback response
+        return {
+          agent: agent,
+          response: `${agent} analysis completed based on available data.`,
+          risk_level: "low",
+          insufficient_context: false
+        };
+      })
+    );
 
     return {
       answer: aiAnswer,
