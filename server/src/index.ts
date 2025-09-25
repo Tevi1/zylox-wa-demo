@@ -109,18 +109,48 @@ app.post("/chat-agents", (req, res) => {
     if (!uid) return res.status(400).json({ error: "x-user-id required" });
     if (!question) return res.status(400).json({ error: "question required" });
 
-    // Return mock chat response
+    // Return mock chat response in the format expected by frontend
     res.json({
       answer: `This is a mock response to: "${question}". The system is working correctly with accountId: ${accountId || 'none'}`,
       confidence: "High",
-      agentResponses: {
-        legal: "Legal analysis: This appears to be a test query requiring further context.",
-        finance: "Financial analysis: No specific financial data provided in the query.",
-        operations: "Operations analysis: Query received and processed successfully.",
-        analyst: "Analyst view: This is a demonstration of the chat system functionality.",
-        tax: "Tax analysis: No tax-specific information to analyze at this time.",
-        strategy: "Strategic analysis: The query demonstrates system integration is working."
-      },
+      agentResponses: [
+        {
+          agent: "Legal",
+          bullets: ["Legal analysis: This appears to be a test query requiring further context."],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Finance", 
+          bullets: ["Financial analysis: No specific financial data provided in the query."],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Ops",
+          bullets: ["Operations analysis: Query received and processed successfully."],
+          risk_level: "low", 
+          insufficient_context: false
+        },
+        {
+          agent: "Analyst",
+          bullets: ["Analyst view: This is a demonstration of the chat system functionality."],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Tax",
+          bullets: ["Tax analysis: No tax-specific information to analyze at this time."],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Strategy",
+          bullets: ["Strategic analysis: The query demonstrates system integration is working."],
+          risk_level: "low",
+          insufficient_context: false
+        }
+      ],
       miyagiMemoriesUsed: 0,
       citations: []
     });
