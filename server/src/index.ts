@@ -450,6 +450,7 @@ app.use(admin);
 app.listen(PORT, async () => {
   console.log(`API on http://localhost:${PORT}`);
   console.log(`🚀 Server started with all endpoints: /account/init, /account/me, /chat-agents`);
+  console.log(`📊 Enhanced demo responses with detailed investor content - Version 2.0`);
   
   try {
     // bootstrap DB: run schema and create a demo account + routing
