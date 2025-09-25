@@ -55,6 +55,17 @@ app.post("/test-account", (req, res) => {
   });
 });
 
+// Simple account init test
+app.post("/account/init-simple", (req, res) => {
+  res.json({ 
+    accountId: "test-account-123",
+    routing_code: "ZY-TEST123",
+    message: "Simple account init working",
+    body: req.body,
+    timestamp: new Date().toISOString() 
+  });
+});
+
 app.listen(PORT, async () => {
   console.log(`API on http://localhost:${PORT}`);
   
