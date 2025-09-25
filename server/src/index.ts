@@ -43,6 +43,9 @@ const PORT = Number(process.env.PORT || 3002);
 // lightweight health probe
 app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
 
+// test endpoint for debugging
+app.get("/test", (_req, res) => res.json({ message: "Server is working", timestamp: new Date().toISOString() }));
+
 app.listen(PORT, async () => {
   // bootstrap DB: run schema and create a demo account + routing
   const schema = fs.readFileSync(path.join(process.cwd(), "src/sql/schema.sql"), "utf-8");
