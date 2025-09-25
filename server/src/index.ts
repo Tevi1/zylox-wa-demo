@@ -16,34 +16,14 @@ import admin from "./routes/admin.js";
 
 const app = express();
 app.use(cors({
-  origin: [
-    "http://localhost:3002",
-    "http://127.0.0.1:3002",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://192.168.1.102:3002",
-    "http://192.168.1.102:3000",
-    "http://172.20.10.2:3002",
-    "https://sovereign-demo.vercel.app",
-    "https://sovereign-demo-*.vercel.app"
-  ],
+  origin: true, // Allow all origins temporarily for debugging
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "x-user-id"],
   credentials: false
 }));
 // Handle CORS preflight for all routes
 app.options('*', cors({
-  origin: [
-    "http://localhost:3002",
-    "http://127.0.0.1:3002",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://192.168.1.102:3002",
-    "http://192.168.1.102:3000",
-    "http://172.20.10.2:3002",
-    "https://sovereign-demo.vercel.app",
-    "https://sovereign-demo-*.vercel.app"
-  ],
+  origin: true, // Allow all origins temporarily for debugging
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "x-user-id"],
   credentials: false
