@@ -98,6 +98,36 @@ app.get("/account/me", (req, res) => {
   }
 });
 
+// Demo data for investor presentations
+const DEMO_DATA = {
+  documents: [
+    {
+      title: "Q3 Financial Report",
+      content: "Revenue increased 15% quarter-over-quarter to $2.3M. Customer acquisition cost decreased by 8% while lifetime value increased by 12%. We're on track to achieve profitability by Q4.",
+      source: "Finance",
+      type: "financial_report"
+    },
+    {
+      title: "Board Meeting Minutes - September 2025",
+      content: "Board discussed expansion into European markets. Key decisions: 1) Approved $500K budget for EU operations, 2) Hired VP of International Sales, 3) Set Q4 revenue target of $3.5M.",
+      source: "Board",
+      type: "meeting_minutes"
+    },
+    {
+      title: "Product Roadmap 2026",
+      content: "Q1: AI-powered analytics dashboard, Q2: Mobile app launch, Q3: Enterprise features, Q4: International expansion. Focus on user experience and scalability.",
+      source: "Product",
+      type: "roadmap"
+    },
+    {
+      title: "Legal Compliance Review",
+      content: "All data processing activities comply with GDPR. Privacy policy updated. Data retention policies implemented. No outstanding legal issues.",
+      source: "Legal",
+      type: "compliance"
+    }
+  ]
+};
+
 // Chat agents endpoint
 app.post("/chat-agents", (req, res) => {
   try {
@@ -109,56 +139,224 @@ app.post("/chat-agents", (req, res) => {
     if (!uid) return res.status(400).json({ error: "x-user-id required" });
     if (!question) return res.status(400).json({ error: "question required" });
 
-    // Return mock chat response in the format expected by frontend
-    res.json({
-      answer: `This is a mock response to: "${question}". The system is working correctly with accountId: ${accountId || 'none'}`,
-      confidence: "High",
-      agentResponses: [
-        {
-          agent: "Legal",
-          bullets: ["Legal analysis: This appears to be a test query requiring further context."],
-          risk_level: "low",
-          insufficient_context: false
-        },
-        {
-          agent: "Finance", 
-          bullets: ["Financial analysis: No specific financial data provided in the query."],
-          risk_level: "low",
-          insufficient_context: false
-        },
-        {
-          agent: "Ops",
-          bullets: ["Operations analysis: Query received and processed successfully."],
-          risk_level: "low", 
-          insufficient_context: false
-        },
-        {
-          agent: "Analyst",
-          bullets: ["Analyst view: This is a demonstration of the chat system functionality."],
-          risk_level: "low",
-          insufficient_context: false
-        },
-        {
-          agent: "Tax",
-          bullets: ["Tax analysis: No tax-specific information to analyze at this time."],
-          risk_level: "low",
-          insufficient_context: false
-        },
-        {
-          agent: "Strategy",
-          bullets: ["Strategic analysis: The query demonstrates system integration is working."],
-          risk_level: "low",
-          insufficient_context: false
-        }
-      ],
-      miyagiMemoriesUsed: 0,
-      citations: []
-    });
+    // Check if user has real data (in a real implementation, this would check the database)
+    const hasRealData = false; // For now, always use demo data
+    
+    if (hasRealData) {
+      // Use real RAG system with user's data
+      // This would call the actual AI agents with real context
+      res.json({
+        answer: `Real response based on your uploaded data: "${question}"`,
+        confidence: "High",
+        agentResponses: [],
+        miyagiMemoriesUsed: 0,
+        citations: []
+      });
+    } else {
+      // Use demo data for investor presentations
+      const demoResponse = generateDemoResponse(question);
+      res.json(demoResponse);
+    }
   } catch (error) {
     console.error("Chat agents error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// Generate demo response based on question
+function generateDemoResponse(question: string) {
+  const lowerQuestion = question.toLowerCase();
+  
+  // Financial questions
+  if (lowerQuestion.includes('revenue') || lowerQuestion.includes('financial') || lowerQuestion.includes('profit')) {
+    return {
+      answer: "Based on our Q3 Financial Report, revenue increased 15% quarter-over-quarter to $2.3M. Customer acquisition cost decreased by 8% while lifetime value increased by 12%. We're on track to achieve profitability by Q4 with projected revenue of $3.5M.",
+      confidence: "High",
+      agentResponses: [
+        {
+          agent: "Finance",
+          bullets: ["Revenue growth of 15% QoQ", "CAC decreased 8%", "LTV increased 12%", "Path to profitability by Q4"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Analyst",
+          bullets: ["Strong growth trajectory", "Efficient customer acquisition", "Healthy unit economics"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Legal",
+          bullets: ["Financial reporting compliant", "No regulatory issues"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Ops",
+          bullets: ["Scalable growth model", "Operational efficiency maintained"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Tax",
+          bullets: ["Tax planning optimized", "No outstanding tax issues"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Strategy",
+          bullets: ["Clear path to profitability", "Sustainable growth model"],
+          risk_level: "low",
+          insufficient_context: false
+        }
+      ],
+      miyagiMemoriesUsed: 1,
+      citations: ["Q3 Financial Report (p.1)"]
+    };
+  }
+  
+  // Board/meeting questions
+  if (lowerQuestion.includes('board') || lowerQuestion.includes('meeting') || lowerQuestion.includes('decision')) {
+    return {
+      answer: "The September 2025 board meeting covered key strategic decisions: 1) Approved $500K budget for EU operations expansion, 2) Hired VP of International Sales to lead European market entry, 3) Set Q4 revenue target of $3.5M. The board is confident in our growth trajectory.",
+      confidence: "High",
+      agentResponses: [
+        {
+          agent: "Strategy",
+          bullets: ["EU expansion approved", "International sales leadership hired", "Q4 target: $3.5M revenue"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Finance",
+          bullets: ["$500K budget allocated", "Revenue targets set", "Investment in growth"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Ops",
+          bullets: ["International operations planned", "Sales team expansion", "Market entry strategy"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Legal",
+          bullets: ["Board decisions documented", "Compliance maintained", "No legal obstacles"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Analyst",
+          bullets: ["Strategic expansion justified", "Market opportunity validated", "Growth metrics achievable"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Tax",
+          bullets: ["International tax planning", "EU compliance considered", "No tax implications"],
+          risk_level: "low",
+          insufficient_context: false
+        }
+      ],
+      miyagiMemoriesUsed: 1,
+      citations: ["Board Meeting Minutes - September 2025 (p.1)"]
+    };
+  }
+  
+  // Product questions
+  if (lowerQuestion.includes('product') || lowerQuestion.includes('roadmap') || lowerQuestion.includes('feature')) {
+    return {
+      answer: "Our 2026 product roadmap includes: Q1: AI-powered analytics dashboard, Q2: Mobile app launch, Q3: Enterprise features, Q4: International expansion. The focus is on user experience and scalability to support our growth trajectory.",
+      confidence: "High",
+      agentResponses: [
+        {
+          agent: "Strategy",
+          bullets: ["AI analytics dashboard Q1", "Mobile app Q2", "Enterprise features Q3", "International expansion Q4"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Ops",
+          bullets: ["Product development timeline", "Resource allocation planned", "Scalability focus"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Analyst",
+          bullets: ["Market-driven roadmap", "User experience priority", "Competitive positioning"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Finance",
+          bullets: ["Development costs budgeted", "Revenue impact projected", "ROI expected"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Legal",
+          bullets: ["IP protection maintained", "Compliance considered", "No legal barriers"],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Tax",
+          bullets: ["R&D tax benefits", "International tax planning", "No tax issues"],
+          risk_level: "low",
+          insufficient_context: false
+        }
+      ],
+      miyagiMemoriesUsed: 1,
+      citations: ["Product Roadmap 2026 (p.1)"]
+    };
+  }
+  
+  // Default demo response
+  return {
+    answer: `This is a demo response to: "${question}". The system is working correctly and would provide real insights based on your uploaded documents. Upload your own files to get personalized analysis.`,
+    confidence: "High",
+    agentResponses: [
+      {
+        agent: "Legal",
+        bullets: ["System ready for legal document analysis", "Compliance checking available"],
+        risk_level: "low",
+        insufficient_context: false
+      },
+      {
+        agent: "Finance",
+        bullets: ["Financial analysis capabilities ready", "Revenue and cost analysis available"],
+        risk_level: "low",
+        insufficient_context: false
+      },
+      {
+        agent: "Ops",
+        bullets: ["Operational insights ready", "Process optimization analysis available"],
+        risk_level: "low",
+        insufficient_context: false
+      },
+      {
+        agent: "Analyst",
+        bullets: ["Data analysis capabilities ready", "Trend analysis available"],
+        risk_level: "low",
+        insufficient_context: false
+      },
+      {
+        agent: "Tax",
+        bullets: ["Tax analysis ready", "Compliance checking available"],
+        risk_level: "low",
+        insufficient_context: false
+      },
+      {
+        agent: "Strategy",
+        bullets: ["Strategic analysis ready", "Market insights available"],
+        risk_level: "low",
+        insufficient_context: false
+      }
+    ],
+    miyagiMemoriesUsed: 0,
+    citations: []
+  };
+}
 
 // Mount other routes after custom endpoints
 app.use(whatsappBridge);
