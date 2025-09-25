@@ -2,10 +2,22 @@ import express from "express";
 import crypto from "crypto";
 import { db } from "../services/db.js";
 const router = express.Router();
+
 // dev header auth helper
 function getUid(req: express.Request): string | null {
   const uid = req.header("x-user-id");
   return uid && uid.trim() ? uid.trim() : null;
+}
+
+// generate routing code function
+function generateRoutingCode() {
+  // AA-XXXXXX uppercase alnum
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const alnum = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const a = letters[Math.floor(Math.random() * letters.length)];
+  const b = letters[Math.floor(Math.random() * letters.length)];
+  const rest = Array.from({ length: 6 }, () => alnum[Math.floor(Math.random() * alnum.length)]).join("");
+  return `${a}${b}-${rest}`;
 }
 
 router.post("/account/init", async (req, res) => {
@@ -55,15 +67,3 @@ router.get("/index/:accountId", async (req, res) => {
   res.json(rows);
 });
 export default router;
-
-import crypto from "crypto";
-function generateRoutingCode() {
-  // AA-XXXXXX uppercase alnum
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const alnum = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const a = letters[Math.floor(Math.random() * letters.length)];
-  const b = letters[Math.floor(Math.random() * letters.length)];
-  let rest = "";
-  for (let i = 0; i < 6; i++) rest += alnum[Math.floor(Math.random() * alnum.length)];
-  return `${a}${b}-${rest}`;
-}
