@@ -613,6 +613,96 @@ function generateDemoResponse(question: string) {
     };
   }
   
+  // Contract and agreement questions
+  if (lowerQuestion.includes('contract') || lowerQuestion.includes('agreement') || lowerQuestion.includes('msa') || lowerQuestion.includes('nda') || lowerQuestion.includes('compare') || lowerQuestion.includes('version')) {
+    return {
+      answer: "## Master Service Agreement Version Comparison\n\n**MSA v2 vs v3 Analysis:**\n\n**Key Changes from v2 (2025-07-10) to v3 (2025-08-20):**\n\n**Service Level Improvements:**\n- **Uptime:** Increased from 99.5% to 99.9%\n- **Response Time:** P1 incidents now < 30 minutes (vs 1 hour)\n- **Reliability:** Enhanced monitoring and alerting systems\n\n**Data Residency & Security:**\n- **New Region:** Added UK option with dedicated KMS\n- **Zero Egress:** Default no-data-leakage policy\n- **Enhanced Encryption:** Customer-managed keys across all regions\n- **Audit Trail:** Improved logging and compliance reporting\n\n**Contract Terms:**\n- **Duration:** Extended from 12 to 24 months\n- **Notice Period:** Increased to 90 days (vs 60 days)\n- **Pricing:** 3% cap uplift for first 3 years\n- **Liability:** Increased cap to 18 months fees (vs 12 months)\n\n**Business Impact:**\n- **Customer Retention:** Longer terms improve LTV\n- **Risk Management:** Higher liability cap reduces exposure\n- **Compliance:** Enhanced security attracts enterprise clients\n- **Revenue Stability:** Longer contracts provide predictable income",
+      confidence: "High",
+      agentResponses: [
+        {
+          agent: "Legal",
+          bullets: [
+            "MSA v3 includes enhanced security terms and compliance framework",
+            "Liability cap increase to 18 months provides better risk coverage",
+            "Extended contract terms (24 months) improve customer retention",
+            "UK data residency option addresses Brexit compliance requirements",
+            "Zero egress policy meets enterprise security standards",
+            "Enhanced audit trail supports regulatory compliance"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Finance",
+          bullets: [
+            "3% pricing cap uplift provides predictable revenue growth",
+            "24-month contracts improve cash flow predictability",
+            "Higher liability cap reduces potential financial exposure",
+            "Enhanced service levels justify premium pricing",
+            "UK region expansion opens new revenue opportunities",
+            "Longer contracts increase customer lifetime value"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Ops",
+          bullets: [
+            "99.9% uptime target requires enhanced infrastructure monitoring",
+            "30-minute P1 response time needs 24/7 operations team",
+            "UK data center setup requires additional operational overhead",
+            "Zero egress architecture needs specialized network configuration",
+            "Enhanced audit logging requires additional storage and processing",
+            "Customer-managed keys need secure key management processes"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Analyst",
+          bullets: [
+            "Version comparison shows clear product evolution and maturity",
+            "Enhanced security features address enterprise market demands",
+            "Longer contract terms indicate strong customer confidence",
+            "UK expansion demonstrates international growth strategy",
+            "Improved service levels reflect operational excellence",
+            "Pricing structure supports sustainable business model"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Tax",
+          bullets: [
+            "UK data residency enables tax-efficient international operations",
+            "Extended contract terms provide better tax planning opportunities",
+            "Enhanced security investments qualify for R&D tax credits",
+            "Customer-managed keys have no adverse tax implications",
+            "Longer contracts improve revenue recognition timing",
+            "International expansion requires tax compliance in new jurisdictions"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Strategy",
+          bullets: [
+            "MSA v3 positions company for enterprise market expansion",
+            "Enhanced security features differentiate from competitors",
+            "UK expansion supports European market entry strategy",
+            "Longer contracts improve customer retention and LTV",
+            "Zero egress model addresses enterprise security concerns",
+            "Version evolution demonstrates product maturity and customer focus"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        }
+      ],
+      miyagiMemoriesUsed: 2,
+      citations: ["Master Service Agreement v3 (p.1-2)", "Master Service Agreement v2 (p.1)"]
+    };
+  }
+  
   // Default demo response
   return {
     answer: `This is a demo response to: "${question}". The system is working correctly and would provide real insights based on your uploaded documents. Upload your own files to get personalized analysis.`,
