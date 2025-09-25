@@ -1,0 +1,6 @@
+node_modules
+.env
+**/*.env
+wa-bridge/wa_auth
+dist
+.DS_Store
