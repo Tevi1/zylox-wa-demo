@@ -140,6 +140,7 @@ app.post("/chat-agents", (req, res) => {
 
 app.listen(PORT, async () => {
   console.log(`API on http://localhost:${PORT}`);
+  console.log(`🚀 Server started with all endpoints: /account/init, /account/me, /chat-agents`);
   
   try {
     // bootstrap DB: run schema and create a demo account + routing
