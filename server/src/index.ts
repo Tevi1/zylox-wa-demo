@@ -46,6 +46,15 @@ app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
 // test endpoint for debugging
 app.get("/test", (_req, res) => res.json({ message: "Server is working", timestamp: new Date().toISOString() }));
 
+// Simple test endpoint for account init
+app.post("/test-account", (req, res) => {
+  res.json({ 
+    message: "Test account endpoint working", 
+    body: req.body,
+    timestamp: new Date().toISOString() 
+  });
+});
+
 app.listen(PORT, async () => {
   // bootstrap DB: run schema and create a demo account + routing
   const schema = fs.readFileSync(path.join(process.cwd(), "src/sql/schema.sql"), "utf-8");
