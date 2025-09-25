@@ -88,6 +88,56 @@ app.post("/account/init", (req, res) => {
   }
 });
 
+// Account me endpoint
+app.get("/account/me", (req, res) => {
+  try {
+    const uid = req.header("x-user-id");
+    if (!uid) return res.status(400).json({ error: "x-user-id required" });
+
+    // Return mock account data
+    res.json({ 
+      accountId: "demo-account-123",
+      routing_code: "ZY-DEMO123",
+      uid: uid
+    });
+  } catch (error) {
+    console.error("Account me error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Chat agents endpoint
+app.post("/chat-agents", (req, res) => {
+  try {
+    const uid = req.header("x-user-id");
+    const body = req.body || {};
+    const question = body.question;
+    const accountId = body.accountId;
+
+    if (!uid) return res.status(400).json({ error: "x-user-id required" });
+    if (!question) return res.status(400).json({ error: "question required" });
+
+    // Return mock chat response
+    res.json({
+      answer: `This is a mock response to: "${question}". The system is working correctly with accountId: ${accountId || 'none'}`,
+      confidence: "High",
+      agentResponses: {
+        legal: "Legal analysis: This appears to be a test query requiring further context.",
+        finance: "Financial analysis: No specific financial data provided in the query.",
+        operations: "Operations analysis: Query received and processed successfully.",
+        analyst: "Analyst view: This is a demonstration of the chat system functionality.",
+        tax: "Tax analysis: No tax-specific information to analyze at this time.",
+        strategy: "Strategic analysis: The query demonstrates system integration is working."
+      },
+      miyagiMemoriesUsed: 0,
+      citations: []
+    });
+  } catch (error) {
+    console.error("Chat agents error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.listen(PORT, async () => {
   console.log(`API on http://localhost:${PORT}`);
   
