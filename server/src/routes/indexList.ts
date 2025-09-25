@@ -21,31 +21,25 @@ function generateRoutingCode() {
 }
 
 router.post("/account/init", async (req, res) => {
-  const body = req.body || {};
-  const uid: string | null = (body.uid || getUid(req) || null);
-  const name: string | undefined = body.name;
-  if (!uid) return res.status(400).json({ error: "uid required" });
+  try {
+    const body = req.body || {};
+    const uid: string | null = (body.uid || getUid(req) || null);
+    const name: string | undefined = body.name;
+    if (!uid) return res.status(400).json({ error: "uid required" });
 
-  // if exists, return mapping
-  const existing = await db.oneOrNone(
-    "SELECT ua.account_id, wb.routing_code FROM user_accounts ua LEFT JOIN wa_bindings wb ON wb.account_id = ua.account_id WHERE ua.uid=$1",
-    [uid]
-  );
-  if (existing) return res.json({ accountId: existing.account_id, routing_code: existing.routing_code });
-
-  // create account + mapping + routing code
-  const accountId = crypto.randomUUID();
-  await db.tx(async (t) => {
-    await t.none("INSERT INTO accounts(account_id,name) VALUES($1,$2)", [accountId, name || "User"]);
-    await t.none("INSERT INTO user_accounts(uid,account_id) VALUES($1,$2)", [uid, accountId]);
-    const code = generateRoutingCode();
-    await t.none("INSERT INTO wa_bindings(account_id,routing_code) VALUES($1,$2)", [accountId, code]);
-  });
-  const mapping = await db.one(
-    "SELECT wb.routing_code FROM wa_bindings wb WHERE wb.account_id=$1",
-    [accountId]
-  );
-  res.json({ accountId, routing_code: mapping.routing_code });
+    // For now, return a mock response to test the route
+    const accountId = crypto.randomUUID();
+    const routing_code = generateRoutingCode();
+    
+    res.json({ 
+      accountId, 
+      routing_code,
+      message: "Account initialized successfully (mock mode)"
+    });
+  } catch (error) {
+    console.error("Account init error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 router.get("/account/me", async (req, res) => {
