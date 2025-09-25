@@ -3,6 +3,7 @@ import express from "express";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - using JS module without types in this demo
 import cors from "cors";
+import crypto from "crypto";
 import { db } from "./services/db.js";
 import fs from "fs";
 import path from "path";
@@ -64,6 +65,27 @@ app.post("/account/init-simple", (req, res) => {
     body: req.body,
     timestamp: new Date().toISOString() 
   });
+});
+
+// Working account init endpoint
+app.post("/account/init", (req, res) => {
+  try {
+    const body = req.body || {};
+    const uid = body.uid || req.header("x-user-id");
+    if (!uid) return res.status(400).json({ error: "uid required" });
+
+    const accountId = crypto.randomUUID();
+    const routing_code = "ZY-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    
+    res.json({ 
+      accountId, 
+      routing_code,
+      message: "Account initialized successfully"
+    });
+  } catch (error) {
+    console.error("Account init error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(PORT, async () => {
