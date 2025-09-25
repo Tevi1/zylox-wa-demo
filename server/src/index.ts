@@ -23,7 +23,9 @@ app.use(cors({
     "http://127.0.0.1:3000",
     "http://192.168.1.102:3002",
     "http://192.168.1.102:3000",
-    "http://172.20.10.2:3002"
+    "http://172.20.10.2:3002",
+    "https://sovereign-demo.vercel.app",
+    "https://sovereign-demo-*.vercel.app"
   ],
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "x-user-id"],
@@ -38,7 +40,9 @@ app.options('*', cors({
     "http://127.0.0.1:3000",
     "http://192.168.1.102:3002",
     "http://192.168.1.102:3000",
-    "http://172.20.10.2:3002"
+    "http://172.20.10.2:3002",
+    "https://sovereign-demo.vercel.app",
+    "https://sovereign-demo-*.vercel.app"
   ],
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "x-user-id"],
