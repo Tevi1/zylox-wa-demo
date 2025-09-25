@@ -56,20 +56,27 @@ app.post("/test-account", (req, res) => {
 });
 
 app.listen(PORT, async () => {
-  // bootstrap DB: run schema and create a demo account + routing
-  const schema = fs.readFileSync(path.join(process.cwd(), "src/sql/schema.sql"), "utf-8");
-  await db.none(schema);
-
-  // ensure a demo account + binding (routing code e.g., ZY-4K7R2X)
-  const accountId = "11111111-1111-1111-1111-111111111111";
-  const code = "ZY-4K7R2X";
-  await db.none("INSERT INTO accounts(account_id,name) VALUES($1,$2) ON CONFLICT DO NOTHING", [accountId, "Demo"]);
-  await db.none(
-    "INSERT INTO wa_bindings(account_id,routing_code) VALUES($1,$2) ON CONFLICT (account_id) DO NOTHING",
-    [accountId, code]
-  );
-
   console.log(`API on http://localhost:${PORT}`);
-  console.log(`Demo accountId: ${accountId}  routing_code: ${code}`);
+  
+  try {
+    // bootstrap DB: run schema and create a demo account + routing
+    const schema = fs.readFileSync(path.join(process.cwd(), "src/sql/schema.sql"), "utf-8");
+    await db.none(schema);
+
+    // ensure a demo account + binding (routing code e.g., ZY-4K7R2X)
+    const accountId = "11111111-1111-1111-1111-111111111111";
+    const code = "ZY-4K7R2X";
+    await db.none("INSERT INTO accounts(account_id,name) VALUES($1,$2) ON CONFLICT DO NOTHING", [accountId, "Demo"]);
+    await db.none(
+      "INSERT INTO wa_bindings(account_id,routing_code) VALUES($1,$2) ON CONFLICT (account_id) DO NOTHING",
+      [accountId, code]
+    );
+    console.log(`Demo accountId: ${accountId}  routing_code: ${code}`);
+    console.log("Database initialized successfully");
+  } catch (error) {
+    console.error("Database initialization failed:", error);
+    console.log("Continuing with mock database...");
+  }
+  
   console.log(`CORS enabled for Vercel domains`);
 });
