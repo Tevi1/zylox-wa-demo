@@ -79,4 +79,5 @@ app.listen(PORT, async () => {
 
   console.log(`API on http://localhost:${PORT}`);
   console.log(`Demo accountId: ${accountId}  routing_code: ${code}`);
+  console.log(`CORS enabled for Vercel domains`);
 });
