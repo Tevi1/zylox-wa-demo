@@ -124,6 +124,48 @@ const DEMO_DATA = {
       content: "All data processing activities comply with GDPR. Privacy policy updated. Data retention policies implemented. No outstanding legal issues.",
       source: "Legal",
       type: "compliance"
+    },
+    {
+      title: "Data Residency & Retention Policy v1.2",
+      content: "Security & Compliance owned policy supporting EU, UK, US regions. Cross-region replication not allowed without explicit consent. Tenant storage uses dedicated S3 buckets per tenant with customer-managed KMS keys where available. Raw ingest retention: 90 days unless customer extends. Processed embeddings retained for contract term. Audit logs: 365 days rolling, encrypted, access-controlled.",
+      source: "Security",
+      type: "policy"
+    },
+    {
+      title: "ACME Manufacturing Procurement Email",
+      content: "Maria Lopez from ACME Manufacturing requesting procurement steps & security questionnaire. Requirements: Completed security questionnaire, confirmation of data residency (EU) and customer-managed keys, draft of DPA and MSA. Questions: Do LLMs run inside ACME's VPC? Is any data retained by third parties?",
+      source: "Sales",
+      type: "email"
+    },
+    {
+      title: "Master Service Agreement v3",
+      content: "Updated MSA v3 (2025-08-20) vs v2. Key changes: 99.9% uptime (vs 99.5%), P1 response < 30 minutes (vs 1 hour), adds UK option with dedicated KMS, zero egress by default, 24-month term (vs 12), 3% cap uplift first 3 years, 18 months liability cap (vs 12).",
+      source: "Legal",
+      type: "contract"
+    },
+    {
+      title: "NDA with ACME Manufacturing",
+      content: "Effective 2025-08-01. Confidential information: All non-public business, technical, financial info. Use limitation: Solely to evaluate business relationship. Security: AES-256 at rest, TLS 1.2+ in transit. Term: 2 years; obligations survive 3 years post-termination.",
+      source: "Legal",
+      type: "nda"
+    },
+    {
+      title: "WhatsApp Ops Team Transcript",
+      content: "Operations team discussion about supplier delay on Device X (2 weeks late). Legal team notes penalty clause triggers at 10 days; must notify ACME today. PM drafting revised timeline; asks if AI can flag impacted contracts. QA slot needs moving to 18 Sep to avoid cascading delays.",
+      source: "Operations",
+      type: "chat"
+    },
+    {
+      title: "Portfolio KPIs Q3 2025",
+      content: "Comprehensive KPI tracking including financial metrics, operational indicators, and performance benchmarks for Q3 2025 portfolio analysis.",
+      source: "Analytics",
+      type: "kpi_report"
+    },
+    {
+      title: "Risk Register",
+      content: "Detailed risk register with risk IDs, descriptions, mitigation actions, and assigned owners for comprehensive risk management oversight.",
+      source: "Risk Management",
+      type: "risk_assessment"
     }
   ]
 };
@@ -388,6 +430,186 @@ function generateDemoResponse(question: string) {
       ],
       miyagiMemoriesUsed: 1,
       citations: ["Product Roadmap 2026 (p.1)"]
+    };
+  }
+  
+  // Security and compliance questions
+  if (lowerQuestion.includes('security') || lowerQuestion.includes('compliance') || lowerQuestion.includes('data') || lowerQuestion.includes('privacy') || lowerQuestion.includes('gdpr')) {
+    return {
+      answer: "## Security & Compliance Overview\n\n**Data Residency & Retention Policy v1.2:**\nOur comprehensive security framework supports EU, UK, and US regions with strict data residency controls. Cross-region replication is not allowed without explicit customer consent, ensuring complete data sovereignty.\n\n**Security Architecture:**\n- **Encryption:** AES-256 at rest, TLS 1.3 in transit\n- **Key Management:** Customer-managed KMS keys where available\n- **Storage:** Dedicated S3 buckets per tenant\n- **Access Control:** Least privilege principle with read-only default connectors\n- **Zero Egress:** No data leaves customer environment by default\n\n**Data Retention & Deletion:**\n- Raw ingest: 90 days (extendable by customer)\n- Processed embeddings: Retained for contract term\n- Audit logs: 365 days rolling, encrypted, access-controlled\n- Customer-initiated deletion: Admin console and API supported\n- Cryptographic erasure: Available where mandated\n\n**Compliance Status:**\n- GDPR compliant with data processing agreements\n- Customer-managed keys for enhanced security\n- Regular security audits and penetration testing\n- SOC 2 Type II certification in progress\n\n**Customer Examples:**\nACME Manufacturing is currently in procurement with specific security requirements including VPC deployment and third-party data retention verification.",
+      confidence: "High",
+      agentResponses: [
+        {
+          agent: "Legal",
+          bullets: [
+            "GDPR compliance framework fully implemented",
+            "Data Processing Agreements (DPA) standardized",
+            "Master Service Agreement v3 includes enhanced security terms",
+            "NDA templates updated for enterprise customers",
+            "Cross-border data transfer mechanisms compliant",
+            "Customer-managed keys legally supported"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Finance",
+          bullets: [
+            "Security investments represent 15% of R&D budget",
+            "Compliance costs factored into pricing model",
+            "Customer security requirements drive premium pricing",
+            "Risk mitigation reduces potential liability exposure",
+            "Security certifications enable enterprise sales",
+            "Compliance overhead managed through automation"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Ops",
+          bullets: [
+            "Multi-region infrastructure supports data residency",
+            "Customer-managed keys implemented across all regions",
+            "Zero egress architecture prevents data leakage",
+            "Dedicated tenant storage ensures isolation",
+            "Audit logging system captures all data access",
+            "Automated compliance monitoring reduces manual overhead"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Analyst",
+          bullets: [
+            "Security posture exceeds industry standards",
+            "Customer security requirements validated in market",
+            "Compliance framework enables enterprise expansion",
+            "Data residency controls address regulatory concerns",
+            "Security investments drive customer trust and retention",
+            "Competitive advantage through superior security model"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Tax",
+          bullets: [
+            "R&D tax credits available for security development",
+            "International tax structure supports multi-region compliance",
+            "Security investments qualify for innovation incentives",
+            "No tax implications for data residency controls",
+            "Compliance costs deductible as business expenses",
+            "Cross-border tax planning considers data location"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Strategy",
+          bullets: [
+            "Security-first approach differentiates in enterprise market",
+            "Data residency controls enable international expansion",
+            "Customer-managed keys address enterprise security concerns",
+            "Compliance framework supports regulated industries",
+            "Security investments align with customer acquisition strategy",
+            "Zero egress model provides competitive advantage"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        }
+      ],
+      miyagiMemoriesUsed: 2,
+      citations: ["Data Residency & Retention Policy v1.2 (p.1-3)", "Master Service Agreement v3 (p.2)", "ACME Manufacturing Procurement Email (p.1)"]
+    };
+  }
+  
+  // Operations and risk questions
+  if (lowerQuestion.includes('operations') || lowerQuestion.includes('risk') || lowerQuestion.includes('supplier') || lowerQuestion.includes('delay') || lowerQuestion.includes('kpi')) {
+    return {
+      answer: "## Operations & Risk Management\n\n**Current Operational Status:**\nOur operations team is actively managing supplier relationships and project timelines. Recent WhatsApp communications show proactive risk management with supplier delays on Device X (2 weeks late) and immediate legal team engagement to address penalty clauses.\n\n**Risk Management Framework:**\n- Comprehensive risk register with detailed mitigation actions\n- Real-time risk monitoring through AI-powered contract tracking\n- Automated alerts for penalty clause triggers\n- Cross-functional team coordination for risk response\n\n**Key Performance Indicators (Q3 2025):**\n- Portfolio performance tracking across all metrics\n- Financial indicators showing strong operational efficiency\n- Risk mitigation effectiveness measured and reported\n- Supplier performance monitoring and management\n\n**Operational Excellence:**\n- Proactive supplier relationship management\n- Legal team integration for contract compliance\n- AI-powered contract analysis and risk flagging\n- Real-time communication and coordination\n- Timeline adjustment capabilities to prevent cascading delays\n\n**Risk Mitigation Examples:**\nWhen Device X supplier delay occurred, our team immediately: 1) Identified penalty clause triggers, 2) Notified customer (ACME) within required timeframe, 3) Drafted revised timeline, 4) Utilized AI contract tracker to identify impacted contracts, 5) Adjusted QA schedule to prevent cascading delays.",
+      confidence: "High",
+      agentResponses: [
+        {
+          agent: "Ops",
+          bullets: [
+            "Supplier delay on Device X managed proactively with 2-week impact",
+            "QA slot rescheduled to September 18 to prevent cascading delays",
+            "AI contract tracker v3 enables rapid impact assessment",
+            "Cross-functional team coordination via WhatsApp for real-time response",
+            "Timeline adjustment capabilities prevent project overruns",
+            "Supplier performance monitoring identifies risks early"
+          ],
+          risk_level: "medium",
+          insufficient_context: false
+        },
+        {
+          agent: "Legal",
+          bullets: [
+            "Penalty clause triggers identified within 10-day window",
+            "ACME notification completed within contractual requirements",
+            "Contract tracker v3 searches 'Device X penalty clause' effectively",
+            "Legal team provides real-time guidance to operations",
+            "Contract compliance monitoring prevents liability exposure",
+            "Risk mitigation actions documented and tracked"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Analyst",
+          bullets: [
+            "Portfolio KPIs Q3 2025 provide comprehensive performance tracking",
+            "Risk register enables systematic risk identification and mitigation",
+            "Operational efficiency metrics show strong performance",
+            "Supplier risk management demonstrates proactive approach",
+            "AI-powered contract analysis improves risk detection",
+            "Cross-functional coordination reduces operational risk"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Finance",
+          bullets: [
+            "Supplier delays impact project margins but within acceptable range",
+            "Penalty clause management prevents additional costs",
+            "Risk mitigation investments show positive ROI",
+            "Operational efficiency improvements offset delay costs",
+            "Portfolio performance metrics guide resource allocation",
+            "Risk management framework reduces financial exposure"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Tax",
+          bullets: [
+            "No tax implications for supplier delay management",
+            "Risk mitigation costs qualify as business expenses",
+            "Contract penalty clauses have no adverse tax impact",
+            "Operational efficiency improvements support tax optimization",
+            "Portfolio performance tracking supports tax planning",
+            "Risk management framework aligns with tax compliance"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        },
+        {
+          agent: "Strategy",
+          bullets: [
+            "Proactive risk management demonstrates operational maturity",
+            "AI-powered contract analysis provides competitive advantage",
+            "Cross-functional coordination model scalable for growth",
+            "Supplier relationship management supports supply chain resilience",
+            "Risk mitigation framework enables confident expansion",
+            "Operational excellence supports customer satisfaction and retention"
+          ],
+          risk_level: "low",
+          insufficient_context: false
+        }
+      ],
+      miyagiMemoriesUsed: 2,
+      citations: ["WhatsApp Ops Team Transcript (p.1)", "Portfolio KPIs Q3 2025 (p.1)", "Risk Register (p.1)"]
     };
   }
   
